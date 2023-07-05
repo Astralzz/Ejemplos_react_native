@@ -14,9 +14,11 @@ const AppStyles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   imagen: {
+    marginTop: 20,
     width: 100,
     height: 100,
     borderRadius: 50,
+    resizeMode: "contain",
   },
   botones: {
     marginTop: 10,
