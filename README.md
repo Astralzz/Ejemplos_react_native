@@ -9,6 +9,8 @@
 - vs code [(Pagina oficial)](https://code.visualstudio.com/download)
 - Expo [(Pagina oficial)](https://expo.dev/)
 
+---
+
 ## 2. Crear proyecto
 
 ### Crear nuevo proyecto
@@ -27,11 +29,15 @@
 
         mv App.js App.tsx
 
+---
+
 ## 3. Comandos importantes
 
 ### ejecutar proyecto
 
     npm start
+
+---
 
 ## 4. Desplegar app
 
@@ -73,4 +79,3 @@ En consola
         eas build --platform all
 
 3/ Esperar y éxito
-
