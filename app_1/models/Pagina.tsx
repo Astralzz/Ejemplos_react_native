@@ -1,5 +1,3 @@
-import React from "react";
-
 // * Pagina
 interface Pagina {
   nombre: string;

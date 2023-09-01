@@ -10,6 +10,9 @@ import Pagina from "../models/Pagina";
 import MenuStyles from "../styles/menuStyles";
 import EncabezadoMenu from "../components/menu/EncabezadoMenu";
 import CuerpoMenu from "../components/menu/CuerpoMenu";
+import PaginaTema from "../pages/camara/PaginaTema";
+import { usarTema } from "../components/theme/TemaApp";
+import MenuPrincipal from "../components/menu/MenuPrincipal";
 
 // * Variables
 const Menu = createDrawerNavigator();
@@ -25,58 +28,48 @@ const ComponentePrueba: React.FC<{ titulo: string }> = ({ titulo }) => {
 // * Paginas del menu
 const paginasMenu: Pagina[] = [
   {
-    nombre: "Inicio",
+    nombre: "Resumen",
+    textoMenu: "Resumen general",
     nombreIcono: "home-sharp",
     componente: ComponentePrueba,
   },
   {
-    nombre: "Paginas",
-    nombreIcono: "settings-sharp",
-    componente: ComponentePrueba,
+    nombre: "Tema",
+    textoMenu: "Cambiar temas",
+    nombreIcono: "color-palette-sharp",
+    componente: PaginaTema,
   },
 ];
 
-// * Menu completo
-const MenuCompleto: React.FC<DrawerContentComponentProps> = ({
-  navigation,
-}) => {
-  return (
-    <DrawerContentScrollView style={MenuStyles.global}>
-      {/* ENCABEZADO */}
-      <EncabezadoMenu
-        titulo={"EDAIN JESUS"}
-        subtitulo={"daiinxd13@gmail.cpm"}
-      />
-
-      {/* CUERPO */}
-      <CuerpoMenu paginas={paginasMenu} navegador={navigation} />
-    </DrawerContentScrollView>
-  );
-};
-
 // Todo ... RUTAS GLOBALES
 const Routes: React.FC = () => {
+  // * Variables
+  const { tema } = usarTema();
+
   return (
     <Menu.Navigator
       initialRouteName="Inicio"
-      drawerContent={(props) => <MenuCompleto {...props} />}
+      drawerContent={(props) => (
+        <MenuPrincipal paginas={paginasMenu} drawer={props} />
+      )}
     >
       {paginasMenu.map((pagina, i) => {
         // Componente
-        const Componente: React.ComponentType<any> = pagina.componente;
+        const Pagina: React.ComponentType<any> = pagina.componente;
 
         return (
           <Menu.Screen
             key={i}
             name={pagina.nombre}
-            // options={
-            //   {
-            //     header: () => <View></View>
-            //   }
-            // }
+            options={{
+              headerTintColor: tema.colorsEncabezado.color_letra_encabezado,
+              headerStyle: {
+                backgroundColor: tema.colorsEncabezado.color_fondo_encabezado,
+              },
+            }}
           >
-            {/* Pasa las propiedades al componente */}
-            {() => <Componente titulo={pagina.titulo ?? pagina.nombre} />}
+            {/* Pagina */}
+            {() => <Pagina titulo={pagina.titulo ?? pagina.nombre} />}
           </Menu.Screen>
         );
       })}

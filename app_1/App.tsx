@@ -1,12 +1,15 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from "./routes/Routes";
+import TemaApp from "./components/theme/TemaApp";
 
 const App: React.FC = () => {
   return (
-    <NavigationContainer>
-      <Routes />
-    </NavigationContainer>
+    <TemaApp>
+      <NavigationContainer>
+        <Routes />
+      </NavigationContainer>
+    </TemaApp>
   );
 };
 

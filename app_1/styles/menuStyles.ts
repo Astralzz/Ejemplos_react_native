@@ -26,10 +26,7 @@ interface EstiloMenu {
 // * Estilos globales
 const MenuStyles: EstiloMenu = {
   global: {
-    borderColor: "#0012",
     borderWidth: 2,
-    backgroundColor: "#78909C",
-    // width: "auto",
   },
 
   // * Encabezado
@@ -41,7 +38,6 @@ const MenuStyles: EstiloMenu = {
       alignItems: "center",
       justifyContent:"center",
       padding: 5,
-      borderBottomColor: "#fff",
       borderBottomWidth: 1,
     },
     imagen: {
@@ -53,13 +49,11 @@ const MenuStyles: EstiloMenu = {
       resizeMode: "contain",
     },
     titulo: {
-      color: "#fff",
       fontSize: 20,
       fontWeight: "bold",
       marginBottom: 5,
     },
     subTitulo: {
-      color: "#fff",
       fontSize: 14,
       fontWeight: "bold",
       marginBottom: 10,
@@ -81,14 +75,12 @@ const MenuStyles: EstiloMenu = {
       borderRadius: 15,
     },
     etiqueta: {
-      marginLeft: 10,
+      marginLeft: 15,
       fontSize: 15,
-      color: "#ffff",
     },
     icono: {
       marginLeft: 10,
       fontSize: 20,
-      color: "#ffff",
     },
   },
 };
