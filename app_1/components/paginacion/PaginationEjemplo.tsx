@@ -77,18 +77,16 @@ const PaginaPorID: React.FC<PaginaPorIDProps> = ({ route, navigation }) => {
 
 const PaginationEjemplo: React.FC = () => {
   return (
-    <NavigationContainer>
-      <Ruta.Navigator>
-        <Ruta.Screen name="Inicio" component={PaginaInicio} />
-        <Ruta.Screen
-          name="Pag_id"
-          component={PaginaPorID}
-          options={{
-            title: "Pagina creada",
-          }}
-        />
-      </Ruta.Navigator>
-    </NavigationContainer>
+    <Ruta.Navigator initialRouteName="Inicio">
+      <Ruta.Screen name="Inicio" component={PaginaInicio} />
+      <Ruta.Screen
+        name="Pag_id"
+        component={PaginaPorID}
+        options={{
+          title: "Pagina creada",
+        }}
+      />
+    </Ruta.Navigator>
   );
 };
 
