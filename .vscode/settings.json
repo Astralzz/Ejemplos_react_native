@@ -5,9 +5,11 @@
         "CERON",
         "CORTEZ",
         "EDAIN",
+        "Galeria",
         "imgs",
         "Ionicons",
         "parametros",
-        "Parametros"
+        "Parametros",
+        "Pressable"
     ]
 }

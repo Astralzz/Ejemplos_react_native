@@ -11,14 +11,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#6A0888"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "plugins": [
       [
         "expo-image-picker",
         {
-          "photosPermission": "La aplicación accede a sus fotos para permitirle compartirlas con sus amigos."
+          "photosPermission": "¿Me permites acceder a tu galería? plisse 🤚🏻😊",
+          "cameraPermission": "¿Me permites acceder a tu cámara? plisse 🤚🏻😊"
         }
       ]
     ],
@@ -30,9 +29,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ],
+      "permissions": ["android.permission.RECORD_AUDIO"],
       "package": "com.astralz.app_1"
     },
     "web": {

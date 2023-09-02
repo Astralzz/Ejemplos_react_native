@@ -10,9 +10,11 @@ import Pagina from "../models/Pagina";
 import MenuStyles from "../styles/menuStyles";
 import EncabezadoMenu from "../components/menu/EncabezadoMenu";
 import CuerpoMenu from "../components/menu/CuerpoMenu";
-import PaginaTema from "../pages/camara/PaginaTema";
+import PaginaTema from "../pages/tema/PaginaTema";
 import { usarTema } from "../components/theme/TemaApp";
 import MenuPrincipal from "../components/menu/MenuPrincipal";
+import PaginaCamara from "../pages/camara/PaginaCamara";
+import PaginaGaleria from "../pages/galeria/PaginaGaleria";
 
 // * Variables
 const Menu = createDrawerNavigator();
@@ -39,7 +41,21 @@ const paginasMenu: Pagina[] = [
     nombreIcono: "color-palette-sharp",
     componente: PaginaTema,
   },
+  {
+    nombre: "Camara",
+    textoMenu: "Uso de cámara",
+    nombreIcono: "camera-sharp",
+    componente: PaginaCamara,
+  },
+  {
+    nombre: "Galeria",
+    textoMenu: "Uso de galería",
+    nombreIcono: "images-sharp",
+    componente: PaginaGaleria,
+  },
 ];
+
+const paramTitulo: string[] = ["Resumen"];
 
 // Todo ... RUTAS GLOBALES
 const Routes: React.FC = () => {
@@ -69,7 +85,13 @@ const Routes: React.FC = () => {
             }}
           >
             {/* Pagina */}
-            {() => <Pagina titulo={pagina.titulo ?? pagina.nombre} />}
+            {() =>
+              paramTitulo.includes(pagina.nombre) ? (
+                <Pagina titulo={pagina.titulo ?? pagina.nombre} />
+              ) : (
+                <Pagina />
+              )
+            }
           </Menu.Screen>
         );
       })}

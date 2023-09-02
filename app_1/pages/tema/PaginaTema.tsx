@@ -8,13 +8,8 @@ import { coloresClaros } from "../../styles/colorsApp";
 // * Tema
 type TipoTema = "sunny-outline" | "moon-outline";
 
-// * Props
-interface PaginaCamaraProps {
-  titulo: string;
-}
-
 // TODO ---> PAGINA CAMARA
-const PaginaTema: React.FC<PaginaCamaraProps> = ({ titulo }) => {
+const PaginaTema: React.FC = () => {
   // * Tema
   const { tema, alternar: toggleTheme } = usarTema();
   // * Icono
