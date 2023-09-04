@@ -4,7 +4,6 @@ import { StyleSheet } from "react-native";
 const GlobalStyles = StyleSheet.create({
   contenedor_centrado: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },

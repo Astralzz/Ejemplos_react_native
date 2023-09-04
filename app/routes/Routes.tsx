@@ -1,28 +1,32 @@
 import React from "react";
-import {
-  DrawerContentComponentProps,
-  DrawerContentScrollView,
-  createDrawerNavigator,
-} from "@react-navigation/drawer";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { View, Text } from "react-native";
 import GlobalStyles from "../styles/global";
 import Pagina from "../models/Pagina";
-import MenuStyles from "../styles/menuStyles";
-import EncabezadoMenu from "../components/menu/EncabezadoMenu";
-import CuerpoMenu from "../components/menu/CuerpoMenu";
 import PaginaTema from "../pages/tema/PaginaTema";
 import { usarTema } from "../components/theme/TemaApp";
 import MenuPrincipal from "../components/menu/MenuPrincipal";
 import PaginaCamara from "../pages/camara/PaginaCamara";
 import PaginaGaleria from "../pages/galeria/PaginaGaleria";
+import { ColorPagina } from "../styles/colorsApp";
 
 // * Variables
 const Menu = createDrawerNavigator();
 
-const ComponentePrueba: React.FC<{ titulo: string }> = ({ titulo }) => {
+const ComponentePrueba: React.FC<{ titulo: string; colors: ColorPagina }> = ({
+  titulo,
+  colors,
+}) => {
   return (
-    <View style={GlobalStyles.contenedor_centrado}>
-      <Text>{titulo ?? "???"}</Text>
+    <View
+      style={{
+        ...GlobalStyles.contenedor_centrado,
+        backgroundColor: colors.color_fondo_pagina,
+      }}
+    >
+      <Text style={{ color: colors.color_letra_paginas }}>
+        {titulo ?? "???"}
+      </Text>
     </View>
   );
 };
@@ -87,7 +91,10 @@ const Routes: React.FC = () => {
             {/* Pagina */}
             {() =>
               paramTitulo.includes(pagina.nombre) ? (
-                <Pagina titulo={pagina.titulo ?? pagina.nombre} />
+                <Pagina
+                  titulo={pagina.titulo ?? pagina.nombre}
+                  colors={tema.colorsPagina}
+                />
               ) : (
                 <Pagina />
               )
