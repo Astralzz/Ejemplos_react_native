@@ -10,12 +10,14 @@ import { ScrollView } from "react-native-gesture-handler";
 import Marcador from "../../models/Marcador";
 import ComponentModal from "../../components/modals/ComponentModal";
 import FormularioMapa from "./FormularioMapa";
+import { alertaBool } from "../../functions/alerts";
 
 // TODO ---> PAGINA CAMARA
 const PaginaMapa: React.FC = () => {
   // * Tema
   const { tema } = usarTema();
   const colors = tema.colorsPagina;
+  const colorsOtros = tema.otros;
 
   // * Variables
   const [isModal, setModal] = useState<boolean>(false);
@@ -31,6 +33,9 @@ const PaginaMapa: React.FC = () => {
   // * Acciones modal
   const cerrarModal = (): void => setModal(false);
   const abrirModal = (): void => setModal(true);
+  const agregarMarcador = (marcador: Marcador): void => {
+    setListaMarcadores((prevMarcadores) => [...prevMarcadores, marcador]);
+  };
 
   // * Obtener ubicación
   const obtenerUbicacion = async (): Promise<void> => {
@@ -54,6 +59,7 @@ const PaginaMapa: React.FC = () => {
         descripcion: "Mi Ubicacion actual en tiempo real",
         latitud: location.coords.latitude,
         longitud: location.coords.longitude,
+        imagenUrl: require("../../assets/imgs/shall.jpg") ?? undefined,
       };
 
       setMarcadorUbicacion(miMarcador);
@@ -102,7 +108,30 @@ const PaginaMapa: React.FC = () => {
   };
 
   // * Formularios
-  const FormularioAgregar: React.FC = () => <FormularioMapa colors={colors} />;
+  const FormularioAgregar: React.FC = () => (
+    <FormularioMapa
+      colors={colors}
+      otrosColores={colorsOtros}
+      agregarMarcador={agregarMarcador}
+      cerrarModal={cerrarModal}
+    />
+  );
+
+  // * Vaciar lista
+  const vaciarLista = async (): Promise<void> => {
+    // Pedimos confirmación
+    const res: boolean = await alertaBool(
+      "¿Vaciar lista?",
+      "Estas seguro de vaciar la lista de marcadores 🥹?",
+      "Cancelar",
+      "Vaciar"
+    );
+
+    // ? Confirmado
+    if (res) {
+      setListaMarcadores([]);
+    }
+  };
 
   return (
     <View
@@ -123,25 +152,30 @@ const PaginaMapa: React.FC = () => {
 
         {/* Mapa */}
         <ComponentMaps
-          marcadores={
-            marcadorUbicacion
-              ? [...listaMarcadores, marcadorUbicacion]
-              : listaMarcadores
-          }
+          listaMarcadores={listaMarcadores}
+          marcadorUbicacion={marcadorUbicacion}
         />
 
         {/* Iconos */}
         <View style={{ marginTop: 18, flexDirection: "row" }}>
+          {/* Ubicacion */}
           <BotonIcono
             color={colors.color_letra_paginas}
             onPress={obtenerUbicacion}
             icono="locate-sharp"
             estiloExtra={{ marginRight: 12 }}
           />
+          {/* Agregar marcador */}
           <BotonIcono
             color={colors.color_letra_paginas}
             onPress={abrirModal}
             icono="add-sharp"
+          />
+          {/* Eliminar lista */}
+          <BotonIcono
+            color={colors.color_letra_paginas}
+            onPress={vaciarLista}
+            icono="trash-sharp"
           />
         </View>
       </ScrollView>
@@ -152,6 +186,7 @@ const PaginaMapa: React.FC = () => {
         Cuerpo={FormularioAgregar}
         visible={isModal}
         cerrarModal={cerrarModal}
+        isOcultarPie
       />
     </View>
   );

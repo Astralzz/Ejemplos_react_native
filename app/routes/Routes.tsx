@@ -61,7 +61,7 @@ const paginasMenu: Pagina[] = [
   {
     nombre: "Mapas",
     textoMenu: "Uso me mapas",
-    nombreIcono: "images-sharp",
+    nombreIcono: "navigate-sharp",
     componente: PaginaMapa,
   },
 ];
