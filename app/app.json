@@ -19,6 +19,12 @@
           "photosPermission": "¿Me permites acceder a tu galería? plisse 🤚🏻😊",
           "cameraPermission": "¿Me permites acceder a tu cámara? plisse 🤚🏻😊"
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "¿Me permites acceder a tu ubicación? plisse 🤚🏻😊"
+        }
       ]
     ],
     "ios": {
@@ -30,7 +36,12 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": ["android.permission.RECORD_AUDIO"],
-      "package": "com.astralz.app_1"
+      "package": "com.astralz.app_1",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCsvdST7DG2uYEZ74flfiV6d3ry1-Tf4x4"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

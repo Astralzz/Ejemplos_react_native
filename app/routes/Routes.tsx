@@ -9,6 +9,7 @@ import MenuPrincipal from "../components/menu/MenuPrincipal";
 import PaginaCamara from "../pages/camara/PaginaCamara";
 import PaginaGaleria from "../pages/galeria/PaginaGaleria";
 import { ColorPagina } from "../styles/colorsApp";
+import PaginaMapa from "../pages/mapas/PaginaMapa";
 
 // * Variables
 const Menu = createDrawerNavigator();
@@ -56,6 +57,12 @@ const paginasMenu: Pagina[] = [
     textoMenu: "Uso de galería",
     nombreIcono: "images-sharp",
     componente: PaginaGaleria,
+  },
+  {
+    nombre: "Mapas",
+    textoMenu: "Uso me mapas",
+    nombreIcono: "images-sharp",
+    componente: PaginaMapa,
   },
 ];
 
