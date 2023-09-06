@@ -14,7 +14,7 @@ react-native-video para una experiencia de video más avanzada.
 
 ---
 
-## Mapas y Geolocalización
+## Mapas y Geolocalización ✅
 
 react-native-maps para integrar mapas de Google Maps.
 react-native-geolocation-service para acceder a la ubicación del dispositivo.
