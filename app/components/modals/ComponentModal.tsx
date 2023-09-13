@@ -5,15 +5,14 @@ import {
   Text,
   TextStyle,
   View,
-  StyleSheet,
   ScrollView,
   Pressable,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { usarTema } from "../theme/TemaApp";
-import { ColorsModal } from "../../styles/colorsApp";
+import { estilosModal } from "../../styles/global";
 
-// Props
+// * Props
 interface ComponentModalProps {
   titulo: string;
   Cuerpo: React.FC;
@@ -23,8 +22,10 @@ interface ComponentModalProps {
   visible: boolean;
   cerrarModal: () => void;
   isOcultarPie?: boolean;
+  accionPie?: () => void;
 }
 
+// Todo -> Componente del modal
 const ComponentModal: React.FC<ComponentModalProps> = ({
   titulo,
   Cuerpo,
@@ -34,6 +35,7 @@ const ComponentModal: React.FC<ComponentModalProps> = ({
   extraStyle,
   style,
   isOcultarPie = false,
+  accionPie,
 }) => {
   // * Tema
   const { tema } = usarTema();
@@ -49,7 +51,7 @@ const ComponentModal: React.FC<ComponentModalProps> = ({
     >
       <View
         style={{
-          ...estilo.contenedorCompleto,
+          ...estilosModal.contenedorCompleto,
           backgroundColor:
             colorsModal.color_fondo_exterior ?? "rgba(0, 0, 0, 0.5)",
         }}
@@ -57,27 +59,27 @@ const ComponentModal: React.FC<ComponentModalProps> = ({
         {/* Modal */}
         <View
           style={{
-            ...estilo.contenedorModal,
+            ...estilosModal.contenedorModal,
             backgroundColor: colorsModal.color_cuerpo,
           }}
         >
           {/* Encabezado */}
           <View
             style={{
-              ...estilo.encabezado,
+              ...estilosModal.encabezado,
               backgroundColor: colorsModal.color_encabezado,
             }}
           >
             <Text
               style={{
-                ...estilo.encabezadoTexto,
+                ...estilosModal.encabezadoTexto,
                 color: colorsModal.color_letra,
               }}
             >
               {titulo}
             </Text>
             {/* Boton de cerrar */}
-            <Pressable onPress={cerrarModal} style={estilo.cerrarBoton}>
+            <Pressable onPress={cerrarModal} style={estilosModal.cerrarBoton}>
               <Icon
                 name="times"
                 size={20}
@@ -89,7 +91,7 @@ const ComponentModal: React.FC<ComponentModalProps> = ({
           {/* Cuerpo */}
           <View
             style={{
-              ...estilo.cuerpoModal,
+              ...estilosModal.cuerpoModal,
               backgroundColor: colorsModal.color_cuerpo,
             }}
           >
@@ -102,7 +104,7 @@ const ComponentModal: React.FC<ComponentModalProps> = ({
           {PieDePagina ? (
             <View
               style={{
-                ...estilo.pieDePagina,
+                ...estilosModal.pieDePagina,
                 backgroundColor: colorsModal.color_pie_de_pagina,
               }}
             >
@@ -111,15 +113,23 @@ const ComponentModal: React.FC<ComponentModalProps> = ({
           ) : (
             !isOcultarPie && (
               <Pressable
-                onPress={cerrarModal}
+                onPress={() => {
+                  // ? Accion
+                  if (accionPie) {
+                    accionPie();
+                    return;
+                  }
+
+                  cerrarModal();
+                }}
                 style={{
-                  ...estilo.aceptarBoton,
+                  ...estilosModal.aceptarBoton,
                   backgroundColor: otros.colorExito,
                 }}
               >
                 <Text
                   style={{
-                    ...estilo.aceptarBotonTexto,
+                    ...estilosModal.aceptarBotonTexto,
                     color: colorsModal.color_letra,
                   }}
                 >
@@ -133,53 +143,5 @@ const ComponentModal: React.FC<ComponentModalProps> = ({
     </Modal>
   );
 };
-
-// * Estilo
-const estilo = StyleSheet.create({
-  contenedorCompleto: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  contenedorModal: {
-    width: "80%",
-    borderRadius: 8,
-    padding: 16,
-  },
-  encabezado: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  encabezadoTexto: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  cerrarBoton: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  cuerpoModal: {
-    maxHeight: "85%",
-    // flex: 1,
-  },
-  pieDePagina: {
-    marginTop: 16,
-  },
-  aceptarBoton: {
-    padding: 10,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 16,
-  },
-  aceptarBotonTexto: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-});
 
 export default ComponentModal;

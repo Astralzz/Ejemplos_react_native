@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { View, StyleSheet, Pressable, Text } from "react-native";
 import GlobalStyles from "../../styles/global";
 import { usarTema } from "../../components/theme/TemaApp";
-import ComponentQr from "../../components/oters/ComponentQr";
+import ComponentQr, {
+  ComponentQrProps,
+} from "../../components/oters/ComponentQr";
 import FormularioQr from "./FormularioQr";
 import ComponentModal from "../../components/modals/ComponentModal";
 
@@ -12,18 +14,23 @@ const PaginaQr: React.FC = () => {
   const { tema } = usarTema();
 
   // * Variables
+  const [dataQr, setDataQr] = useState<ComponentQrProps | null>(null);
   const [isModal, setModal] = useState<boolean>(false);
 
   // * Acciones modal
   const cerrarModal = (): void => setModal(false);
   const abrirModal = (): void => setModal(true);
-
+  const crearQr = (data: ComponentQrProps): void => {
+    cerrarModal();
+    setDataQr(data);
+  };
+  
   // * Formularios
   const FormularioCrearQr: React.FC = () => (
     <FormularioQr
       colors={tema.colorsPagina}
       otrosColores={tema.otros}
-      cerrarModal={cerrarModal}
+      crearQr={crearQr}
     />
   );
 
@@ -36,22 +43,26 @@ const PaginaQr: React.FC = () => {
     >
       {/* Boton y texto */}
       <View style={{ alignItems: "center" }}>
-        <Pressable
-          onPress={abrirModal}
-          style={{
-            ...estilo.styleBoton,
-            borderColor: tema.colorsPagina.color_letra_paginas,
-          }}
-        >
-          <Text
+        {dataQr ? (
+          <ComponentQr {...dataQr} />
+        ) : (
+          <Pressable
+            onPress={abrirModal}
             style={{
-              ...estilo.textBoton,
-              color: tema.colorsPagina.color_letra_paginas,
+              ...estilo.styleBoton,
+              borderColor: tema.colorsPagina.color_letra_paginas,
             }}
           >
-            Crear QR
-          </Text>
-        </Pressable>
+            <Text
+              style={{
+                ...estilo.textBoton,
+                color: tema.colorsPagina.color_letra_paginas,
+              }}
+            >
+              Crear QR
+            </Text>
+          </Pressable>
+        )}
       </View>
 
       {/* Modal qr */}

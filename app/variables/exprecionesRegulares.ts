@@ -23,3 +23,6 @@ export const regexNumerosDecimales: RegExp =
 
 // * Para Números cordeladas (longitud y latitud)
 export const regexCodeadas: RegExp = /^-?(\d{1,3}(?:\.\d+)?|-\.\d+)$/;
+
+// * Para datos de un qr
+export const regexDatosQr: RegExp = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\d\s_\-]{2,120}$/;
