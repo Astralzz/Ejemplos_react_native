@@ -25,6 +25,13 @@
         {
           "locationAlwaysAndWhenInUsePermission": "¿Me permites acceder a tu ubicación? plisse 🤚🏻😊"
         }
+      ],
+      [
+        "expo-barcode-scanner",
+        {
+          "cameraPermission": "¿Me permites acceder a tu cámara? plisse 🤚🏻😊",
+          "microphonePermission": "¿Me permites acceder a tu micrófono? plisse 🤚🏻😊"
+        }
       ]
     ],
     "ios": {

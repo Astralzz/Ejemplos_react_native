@@ -21,6 +21,14 @@ react-native-geolocation-service para acceder a la ubicación del dispositivo.
 
 ---
 
+---
+
+## Escáner y creador de QR ✅
+
+react-native-svg react-native-qrcode-svg para la creación de QR
+
+---
+
 ## Formularios y Validación
 
 formik para la gestión de formularios.

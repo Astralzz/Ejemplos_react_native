@@ -243,16 +243,22 @@ const FormularioQr: React.FC<FormularioQrProps> = ({
       <Pressable
         disabled={!isDatosValidos()}
         onPress={() => {
+          const t: number = 350;
+
           crearQr({
             datos: informacionQr,
-            tamano: 250,
+            tamano: t,
             colorFondo: colorFondoQr,
             color: colorQr,
-            logo: imgSeleccionada
-              ? {
-                  img: imgSeleccionada.assets,
-                }
-              : undefined,
+            logo:
+              imgSeleccionada &&
+              imgSeleccionada.assets &&
+              imgSeleccionada.assets[0]
+                ? {
+                    img: imgSeleccionada.assets[0],
+                    tamano: t / 4,
+                  }
+                : undefined,
           });
         }}
         style={{

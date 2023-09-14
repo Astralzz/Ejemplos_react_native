@@ -1,4 +1,5 @@
 import React from "react";
+import { View } from "react-native";
 import { Alert, ImageSourcePropType } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 
@@ -15,6 +16,7 @@ export interface StyleLogoQr {
 export interface ComponentQrProps {
   datos: string;
   tamano: number;
+  tamBorde?: number;
   color?: string;
   colorFondo?: string;
   siDaError?: () => void;
@@ -25,6 +27,7 @@ export interface ComponentQrProps {
 const ComponentQr: React.FC<ComponentQrProps> = ({
   datos,
   tamano,
+  tamBorde = 5,
   color = "black",
   colorFondo = "white",
   siDaError,
@@ -51,14 +54,16 @@ const ComponentQr: React.FC<ComponentQrProps> = ({
   // ? Con logo
   if (logo) {
     return (
-      <QRCode
-        {...commonQRProps}
-        logo={logo.img}
-        logoSize={logo.tamano}
-        logoBackgroundColor={logo.colorFondo}
-        logoMargin={logo.margen}
-        logoBorderRadius={logo.radioBorde}
-      />
+      <View style={{ borderWidth: tamBorde, borderColor: logo.colorFondo ?? "white" }}>
+        <QRCode
+          {...commonQRProps}
+          logo={logo.img}
+          logoSize={logo.tamano}
+          logoBackgroundColor={logo.colorFondo}
+          logoMargin={logo.margen}
+          logoBorderRadius={logo.radioBorde}
+        />
+      </View>
     );
   }
 
