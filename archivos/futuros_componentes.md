@@ -27,6 +27,8 @@ react-native-geolocation-service para acceder a la ubicación del dispositivo.
 
 react-native-svg react-native-qrcode-svg para la creación de QR
 
+expo-barcode-scanner para escanear diferentes tipos de QRS
+
 ---
 
 ## Formularios y Validación
@@ -74,20 +76,12 @@ react-navigation/stack para la navegación tipo pila.
 ## Integración de API
 
 axios para realizar solicitudes HTTP.
-fetch API nativa de JavaScript.
 
 ---
 
 ## Uso de Sensores del Dispositivo
 
 APIs nativas de React Native para sensores como acelerómetro, giroscopio, brújula, etc.
-
----
-
-## Integración de Librerías Externas
-
-npm o yarn para instalar bibliotecas externas.
-Ejemplos de integración en tu documentación.
 
 ---
 

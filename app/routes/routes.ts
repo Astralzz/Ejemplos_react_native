@@ -4,6 +4,7 @@ import PaginaCamara from "../pages/camara/PaginaCamara";
 import PaginaGaleria from "../pages/galeria/PaginaGaleria";
 import PaginaMapa from "../pages/mapas/PaginaMapa";
 import PaginaQr from "../pages/qr/PaginaQr";
+import PaginaApi from "../pages/api/PaginaApi";
 
 // * Rutas de la app
 export const listaPaginas: Pagina[] = [
@@ -42,6 +43,12 @@ export const listaPaginas: Pagina[] = [
     textoMenu: "Uso de qr",
     nombreIcono: "qr-code-sharp",
     componente: PaginaQr,
+  },
+  {
+    nombre: "API",
+    textoMenu: "Uso de api",
+    nombreIcono: "globe-sharp",
+    componente: PaginaApi,
   },
 ];
 

@@ -7,7 +7,7 @@ import MenuStyles from "../../styles/menuStyles";
 import EncabezadoMenu from "./EncabezadoMenu";
 import CuerpoMenu from "./CuerpoMenu";
 import Pagina from "../../models/Pagina";
-import VariablesColors, { ColorsMenu } from "../../styles/colorsApp";
+import { ColorsMenu } from "../../styles/colorsApp";
 import { StyleProp, ViewStyle } from "react-native";
 import { usarTema } from "../theme/TemaApp";
 
@@ -18,14 +18,10 @@ interface MenuCompletoProps {
 }
 
 // * Menu completo
-const MenuPrincipal: React.FC<MenuCompletoProps> = ({
-  drawer,
-  paginas,
-}) => {
-
-// * Variables
+const MenuPrincipal: React.FC<MenuCompletoProps> = ({ drawer, paginas }) => {
+  // * Variables
   const { tema } = usarTema();
-  const colorsMenu:ColorsMenu = tema.colorsMenu;
+  const colorsMenu: ColorsMenu = tema.colorsMenu;
 
   // * Estilo
   const estiloMenu: StyleProp<ViewStyle> = {

@@ -26,3 +26,6 @@ export const regexCodeadas: RegExp = /^-?(\d{1,3}(?:\.\d+)?|-\.\d+)$/;
 
 // * Para datos de un qr
 export const regexDatosQr: RegExp = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\d\s_\-]{2,120}$/;
+
+// * Para Matricula
+export const regexMatricula: RegExp = /^[0-9]{8}$/;
