@@ -29,7 +29,7 @@ export interface RespuestaApi {
 }
 
 // * Comprobar apis
-export const comprobarApiUagroApp = (): boolean => !API_UAGRO_APP;
+export const urlNoEncontrada = (): boolean => !API_UAGRO_APP;
 
 // * Respuesta axios
 export const catchAxiosError = async (er: unknown): Promise<RespuestaApi> => {

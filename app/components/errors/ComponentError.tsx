@@ -3,8 +3,21 @@ import { View, Text } from "react-native";
 import GlobalStyles from "../../styles/global";
 import { usarTema } from "../../components/theme/TemaApp";
 
+// * Props
+interface ComponentErrorProps {
+  titulo: string;
+  mensaje: string;
+  accion?: () => void;
+  accionAsync?: () => Promise<void>;
+}
+
 // TODO ---> PAGINA CAMARA
-const ErrorDefaultComponent: React.FC = () => {
+const ComponentError: React.FC<ComponentErrorProps> = ({
+  mensaje,
+  titulo,
+  accion,
+  accionAsync,
+}) => {
   // * Tema
   const { tema } = usarTema();
 
@@ -27,7 +40,7 @@ const ErrorDefaultComponent: React.FC = () => {
             fontWeight: "bold",
           }}
         >
-          Error 404
+          {titulo}
         </Text>
         {/* Mensaje */}
         <Text
@@ -40,11 +53,11 @@ const ErrorDefaultComponent: React.FC = () => {
             marginRight: 12,
           }}
         >
-          La pagina a la que se intenta acceder no existe
+          {mensaje}
         </Text>
       </View>
     </View>
   );
 };
 
-export default ErrorDefaultComponent;
+export default ComponentError;

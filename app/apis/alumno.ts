@@ -3,7 +3,7 @@ import {
   API_UAGRO_APP,
   RespuestaApi,
   catchAxiosError,
-  comprobarApiUagroApp,
+  urlNoEncontrada,
 } from "./variables";
 
 // * Proxy
@@ -15,7 +15,7 @@ export async function apiObtenerPlanAlumno(
 ): Promise<RespuestaApi> {
   try {
     // ? Url no encontrada
-    if (comprobarApiUagroApp()) {
+    if (urlNoEncontrada()) {
       throw new Error("No se pudo encontrar la url de la uagro app");
     }
 
@@ -44,19 +44,19 @@ export async function apiObtenerPlanAlumno(
 }
 
 // * Obtener calificaciones de un alumno
-export async function apiObtenerCalificacionesAlumno(
-  matricula: string | null,
-  plan: string | null,
-  version: string | null
-): Promise<RespuestaApi> {
+export async function apiObtenerCalificacionesAlumno(datos: {
+  matricula: string;
+  plan: string;
+  version: string;
+}): Promise<RespuestaApi> {
   try {
     // ? Url no encontrada
-    if (!comprobarApiUagroApp()) {
+    if (urlNoEncontrada()) {
       throw new Error("No se pudo encontrar la url de la uagro app");
     }
 
     // Ruta
-    let url = `${API_UAGRO_APP}/${PROXY_UAGRO_APP}/calificaciones/alumno/${matricula}/${plan}/${version}`;
+    let url = `${API_UAGRO_APP}/${PROXY_UAGRO_APP}/calificaciones/alumno/${datos.matricula}/${datos.plan}/${datos.version}`;
     // https://www.uagroapp.uagro.mx/api/proxy/uagro/calificaciones/alumno/15240863/06/23
 
     // Enviamos

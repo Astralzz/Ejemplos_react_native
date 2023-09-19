@@ -7,10 +7,15 @@ import Icon from "react-native-vector-icons/Ionicons";
 interface TarjetaPlanProps {
   plan: PlanAlumno;
   colorLetra: string;
+  accion: (plan: PlanAlumno) => void;
 }
 
 // Todo --> Tarjeta
-const TarjetaPlan: React.FC<TarjetaPlanProps> = ({ plan, colorLetra }) => {
+const TarjetaPlan: React.FC<TarjetaPlanProps> = ({
+  plan,
+  colorLetra,
+  accion,
+}) => {
   return (
     <View style={estilo.caja}>
       <View style={{ ...estilo.cuerpo, borderColor: colorLetra }}>
@@ -31,7 +36,7 @@ const TarjetaPlan: React.FC<TarjetaPlanProps> = ({ plan, colorLetra }) => {
           {/* Ver calificaciones */}
           {/* Boton de buscar */}
           <Pressable
-            // onPress={buscarPlanes}
+            onPress={() => accion(plan)}
             style={{
               ...estilo.boton_ver,
               borderColor: colorLetra,

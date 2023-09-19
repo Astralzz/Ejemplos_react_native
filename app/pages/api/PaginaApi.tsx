@@ -10,6 +10,7 @@ import { RespuestaApi } from "../../apis/variables";
 import PlanAlumno from "../../models/alumno/Plan";
 import { ScrollView } from "react-native-gesture-handler";
 import TarjetaPlan from "./TarjetaPlan";
+import ModalCalificaciones from "./ModalCalificaciones";
 
 // Todo --> Pagina del api
 const PaginaApi: React.FC = () => {
@@ -18,10 +19,38 @@ const PaginaApi: React.FC = () => {
   const colorLetra = tema.colorsPagina.color_letra_paginas;
 
   // * Variables
+  const [isModal, setModal] = useState<boolean>(false);
   const [matricula, setMatricula] = useState<string | null>(null);
   const [isMatriculaValida, setMatriculaValida] = useState<boolean>(false);
   const [listaPlanes, setListaPlanes] = useState<PlanAlumno[]>([]);
   const [isCargando, setCargando] = useState<boolean>(false);
+  const [datosAlumno, setDatosAlumno] = useState<
+    | (PlanAlumno & {
+        matricula: string | null;
+      })
+    | undefined
+  >(undefined);
+
+  // * Acciones
+  const abrirModal = (): void => setModal(true);
+  const cerrarModal = (): void => setModal(false);
+  const verCalificaciones = (plan: PlanAlumno): void => {
+    // ? No existe la matricula
+    if (!matricula) {
+      Alert.alert("Error 🔴", "No se pudo encontrar la matricula del alumno");
+      setDatosAlumno(undefined);
+      return;
+    }
+
+    // Agregamos
+    setDatosAlumno({
+      ...plan,
+      matricula: matricula,
+    });
+
+    // Abrimos modal
+    abrirModal();
+  };
 
   // * Buscar pla del alumno
   const buscarPlanes = async (): Promise<void> => {
@@ -133,7 +162,12 @@ const PaginaApi: React.FC = () => {
             <View style={estilo.cuerpo_tarjeta}>
               {listaPlanes.map((plan, i) => {
                 return (
-                  <TarjetaPlan key={i} plan={plan} colorLetra={colorLetra} />
+                  <TarjetaPlan
+                    key={i}
+                    plan={plan}
+                    colorLetra={colorLetra}
+                    accion={verCalificaciones}
+                  />
                 );
               })}
             </View>
@@ -149,6 +183,19 @@ const PaginaApi: React.FC = () => {
           </Text>
         )}
       </View>
+
+      {/* Modal */}
+      <ModalCalificaciones
+        isVisible={isModal}
+        cerrarModal={cerrarModal}
+        datosAlumno={datosAlumno}
+        colors={{
+          pagina: tema.colorsPagina.color_fondo_pagina,
+          letra: colorLetra,
+          colorsModal: tema.colorsModal,
+          otros: tema.otros,
+        }}
+      />
     </View>
   );
 };
