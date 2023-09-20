@@ -267,7 +267,7 @@ const compartirImagen = async (): Promise<void> => {
 
 Ejemplo: en ts
 
-```ts
+```tsx
 import React, { useState } from "react";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { StyleSheet, View, Image } from "react-native";
@@ -441,7 +441,7 @@ Está disponible tanto como una biblioteca independiente como como una extensió
 
 Ejemplo: en ts
 
-```ts
+```tsx
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Alert, Pressable } from "react-native";
 import {
@@ -612,7 +612,7 @@ export default EscanerQR;
 
 Ejemplo: en ts
 
-```ts
+```tsx
 import React from "react";
 import { View } from "react-native";
 import { Alert, ImageSourcePropType } from "react-native";
@@ -695,38 +695,100 @@ export default ComponentQr;
 
 ---
 
-## 2
+## Axios
 
-[Link oficial](https://)
+### Biblioteca de cliente HTTP que permite realizar solicitudes a un endpoint determinado
 
-    npx ....
+[Link oficial](https://www.npmjs.com/package/axios)
+
+    npm i axios
 
 Ejemplo: en ts
 
 ```ts
+// * Obtener plan de un alumno
+export async function apiObtenerPlanAlumno(
+  matricula: string
+): Promise<RespuestaApi> {
+  try {
+    // ? Url no encontrada
+    if (urlNoEncontrada()) {
+      throw new Error("No se pudo encontrar la url de la uagro app");
+    }
 
-```
+    // Ruta
+    let url = `${API_UAGRO_APP}/${PROXY_UAGRO_APP}/planes/alumno/${matricula}`;
 
-```json
+    // Enviamos
+    const res = await axios.get(url);
 
+    // ? No existe
+    if (!res.data) {
+      throw new Error("Los datos del plan son indefinidos");
+    }
+
+    // * Éxito
+    return {
+      estado: true,
+      listaPlanesAlumnos: res.data,
+    };
+
+    // ! Error
+  } catch (er: unknown) {
+    return await catchAxiosError(er);
+  }
+}
 ```
 
 ---
 
-## 3
+## Dotenv
 
-[Link oficial](https://)
+### Biblioteca para crear variables de entorno en el .env
 
-    npx ....
+[Link oficial](https://www.npmjs.com/package/react-native-dotenv)
+
+    npm i react-native-dotenv
+
+Creamos un archivo **.env** en la raíz del proyecto a nivel de package.json y creamos nuestras variables
+
+```env
+ENV_API_UAGRO_APP=XXXXXX
+```
+
+Agregamos lo siguiente en el archivo **babel.config.js**
+
+```ts
+module.exports = function (api) {
+  api.cache(true);
+  return {
+    presets: ["babel-preset-expo"],
+    plugins: [
+      "......",
+      [
+        "module:react-native-dotenv",
+        {
+          envName: "APP_ENV",
+          moduleName: "@env",
+          path: ".env",
+          blacklist: null,
+          whitelist: null,
+          safe: false,
+          allowUndefined: true,
+        },
+      ],
+    ],
+  };
+};
+```
 
 Ejemplo: en ts
 
 ```ts
+import { ENV_API_UAGRO_APP } from "@env";
 
-```
-
-```json
-
+// Variable
+export const API_UAGRO_APP: string | undefined = ENV_API_UAGRO_APP;
 ```
 
 ---

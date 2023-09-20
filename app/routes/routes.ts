@@ -5,6 +5,7 @@ import PaginaGaleria from "../pages/galeria/PaginaGaleria";
 import PaginaMapa from "../pages/mapas/PaginaMapa";
 import PaginaQr from "../pages/qr/PaginaQr";
 import PaginaApi from "../pages/api/PaginaApi";
+import PaginaDatabase from "../pages/database/PaginaDatabase";
 
 // * Rutas de la app
 export const listaPaginas: Pagina[] = [
@@ -47,8 +48,14 @@ export const listaPaginas: Pagina[] = [
   {
     nombre: "API",
     textoMenu: "Uso de api",
-    nombreIcono: "globe-sharp",
+    nombreIcono: "server-sharp",
     componente: PaginaApi,
+  },
+  {
+    nombre: "SQL",
+    textoMenu: "Uso de bd SQL",
+    nombreIcono: "list-sharp",
+    componente: PaginaDatabase,
   },
 ];
 

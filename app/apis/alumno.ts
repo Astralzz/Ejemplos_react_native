@@ -21,7 +21,6 @@ export async function apiObtenerPlanAlumno(
 
     // Ruta
     let url = `${API_UAGRO_APP}/${PROXY_UAGRO_APP}/planes/alumno/${matricula}`;
-    // https://www.uagroapp.uagro.mx/api/proxy/uagro/planes/alumno/15240863
 
     // Enviamos
     const res = await axios.get(url);
@@ -57,7 +56,6 @@ export async function apiObtenerCalificacionesAlumno(datos: {
 
     // Ruta
     let url = `${API_UAGRO_APP}/${PROXY_UAGRO_APP}/calificaciones/alumno/${datos.matricula}/${datos.plan}/${datos.version}`;
-    // https://www.uagroapp.uagro.mx/api/proxy/uagro/calificaciones/alumno/15240863/06/23
 
     // Enviamos
     const res = await axios.get(url);

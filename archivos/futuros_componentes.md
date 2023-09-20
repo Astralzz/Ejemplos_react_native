@@ -38,10 +38,10 @@ yup para la validación de formularios.
 
 ---
 
-## Autenticación
+## Navegación ✅
 
-Firebase Authentication o Auth0 para autenticación.
-react-navigation para la navegación entre pantallas de inicio de sesión y registro.
+react-navigation para la navegación entre pantallas.
+react-navigation/stack para la navegación tipo pila.
 
 ---
 
@@ -66,14 +66,7 @@ react-native-sqlite-storage para bases de datos SQLite locales.
 
 ---
 
-## Navegación Avanzada
-
-react-navigation para la navegación entre pantallas.
-react-navigation/stack para la navegación tipo pila.
-
----
-
-## Integración de API
+## Integración de API ✅
 
 axios para realizar solicitudes HTTP.
 

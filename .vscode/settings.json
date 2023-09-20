@@ -2,7 +2,9 @@
     "cSpell.words": [
         "accion",
         "ÁÉÍÓÚ",
+        "asincrónica",
         "astralz",
+        "AUTOINCREMENT",
         "Automatico",
         "barcodes",
         "calactexm",
@@ -42,9 +44,11 @@
         "Parametros",
         "Pressable",
         "qrcode",
+        "sqlite",
         "tamano",
         "uagro",
         "UAGRO",
-        "Ubicacion"
+        "Ubicacion",
+        "Unico"
     ]
 }

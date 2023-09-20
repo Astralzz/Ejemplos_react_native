@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import GlobalStyles from "../../styles/global";
 import { usarTema } from "../../components/theme/TemaApp";
 import BotonTema from "../../components/botones/BotonTema";
