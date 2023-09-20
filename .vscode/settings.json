@@ -46,9 +46,11 @@
         "qrcode",
         "sqlite",
         "tamano",
+        "telefono",
         "uagro",
         "UAGRO",
         "Ubicacion",
-        "Unico"
+        "Unico",
+        "validacion"
     ]
 }

@@ -31,7 +31,9 @@ export interface ColorPagina {
 // * Otros colores
 export interface OtrosColores {
   colorExito: string;
+  colorExitoOpaco: string;
   colorError: string;
+  colorErrorOpaco: string;
 }
 
 // * Variables
@@ -73,8 +75,10 @@ export const coloresClaros: VariablesColors = {
     color_pie_de_pagina: COLOR_FONDO_GLOBAL_CLARO,
   },
   otros: {
-    colorExito: "#00FF00",
-    colorError: "#FF0000",
+    colorExito: "rgb(0,189,2)",
+    colorExitoOpaco: "rgba(0,189,2, 0.3)",
+    colorError: "rgb(184,0,2)",
+    colorErrorOpaco: "rgba(184,0,2,0.3)",
   },
 };
 
@@ -104,8 +108,10 @@ export const coloresOscuros: VariablesColors = {
     color_pie_de_pagina: COLOR_FONDO_GLOBAL_OSCURO,
   },
   otros: {
-    colorExito: "#008000",
-    colorError: "#FF4500",
+    colorExito: "rgb(0,149,2)",
+    colorExitoOpaco: "rgba(0,149,2, 0.3)",
+    colorError: "rgb(124,0,2)",
+    colorErrorOpaco: "rgba(124,0,2, 0.3)",
   },
 };
 

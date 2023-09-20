@@ -1,6 +1,7 @@
 import * as SQLite from "expo-sqlite";
 import * as FileSystem from "expo-file-system";
-import { Asset } from "expo-asset";
+import Tabla from "../models/tabla/Tabla";
+import Columna from "../models/tabla/Columna";
 
 // * Ruta al directorio de documentos
 const DIRECTORIO_APP = FileSystem.documentDirectory;
@@ -46,47 +47,150 @@ export async function abrirBaseDeDatos(
   }
 }
 
-// Ejemplo de cómo crear una tabla en la base de datos.
-async function crearTabla(db: SQLite.WebSQLDatabase) {
-  await db.transaction((tx) => {
-    // Define la sentencia SQL para crear una tabla.
-    tx.executeSql(
-      "CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, edad INTEGER)"
+// * Cerrar base de datos
+export function cerrarBaseDeDatos(database: SQLite.WebSQLDatabase): void {
+  try {
+    // ? Esta abierta
+    if (database) {
+      // Cerramos
+      database.closeAsync;
+    }
+  } catch (er: unknown) {
+    throw new Error(String(er));
+  }
+}
+
+// * Crear Tabla
+export async function crearTablaEnBD(
+  database: SQLite.WebSQLDatabase,
+  tabla: Tabla
+): Promise<void> {
+  try {
+    // Creamos la sentencia sql
+    const sentenciaSql = `
+        CREATE TABLE IF NOT EXISTS ${tabla.nombre} (
+          ${tabla.columnas
+            .map((columna) => `${columna.nombre} ${obtenerSQLColumna(columna)}`)
+            .join(", ")}
+        );
+      `;
+
+    // Mostramos
+    console.log(sentenciaSql);
+
+    // Ejecutamos la sentencia
+    database.transaction((tx: SQLite.SQLTransaction) =>
+      tx.executeSql(
+        // Sentencia
+        sentenciaSql,
+        // Columnas
+        [],
+        // * Exito | callback
+        // Tipo => SQLStatementCallback = (transaction: SQLTransaction, resultSet: SQLResultSet) => void;
+        (txObj: SQLite.SQLTransaction, resultSet: SQLite.SQLResultSet) => {
+          console.log(`Exito: ${resultSet.rowsAffected}`);
+        },
+        // ! Error | errorCallback
+        // tipo => (transaction: SQLTransaction, error: SQLError) => boolean;
+        (txObj: SQLite.SQLTransaction, error: SQLite.SQLError) => {
+          console.log("Error", error.message);
+          return false;
+        }
+      )
     );
-  });
+
+    console.log("FINALIZADO");
+
+    // ! Error
+  } catch (error: unknown) {
+    throw new Error(String(error));
+  }
 }
 
-// Ejemplo de cómo insertar datos en la tabla.
-async function insertarDatos(
-  db: SQLite.WebSQLDatabase,
-  nombre: string,
-  edad: number
-) {
-  await db.transaction((tx) => {
-    // Define la sentencia SQL para insertar datos en la tabla.
-    tx.executeSql("INSERT INTO usuarios (nombre, edad) VALUES (?, ?)", [
-      nombre,
-      edad,
-    ]);
-  });
+// * Insertar datos
+export async function insertarUsuario(
+  database: SQLite.WebSQLDatabase
+): Promise<void> {
+  try {
+    const nombre = "Ejemplo Nombre";
+    const matricula = "12345678";
+    const telefono = "5555555555";
+
+    // * Sentencia
+    const sentenciaSql = `INSERT INTO usuarios (nombre, matricula, telefono) VALUES (?, ?, ?)`;
+
+    database.transaction((tx: SQLite.SQLTransaction) => {
+      tx.executeSql(
+        sentenciaSql,
+        [nombre, matricula, telefono],
+        (_, resultSet) => {
+          // La inserción fue exitosa
+          console.log(`Datos insertados correctamente: ${resultSet.insertId}`);
+        }
+        // (_, error) => {
+        //   // Manejo de errores si la inserción falla
+        //   console.error("Error al insertar datos:", error);
+        // }
+      );
+    });
+  } catch (error: unknown) {
+    throw new Error(String(error));
+  }
 }
 
-// Ejemplo de cómo eliminar datos de la tabla.
-async function eliminarDatos(db: SQLite.WebSQLDatabase, id: number) {
-  await db.transaction((tx) => {
-    // Define la sentencia SQL para eliminar datos de la tabla por ID.
-    tx.executeSql("DELETE FROM usuarios WHERE id = ?", [id]);
-  });
-}
+// Obtener el SQL de la columna
+function obtenerSQLColumna(columna: Columna): string {
+  // Sql
+  let sql = "";
 
-// Uso de la función para abrir la base de datos
-// abrirBaseDeDatos("ruta/al/archivo.db")
-//   .then(async (db) => {
-//     // Realiza operaciones en la base de datos, como crear, insertar o eliminar datos.
-//     await crearTabla(db);
-//     await insertarDatos(db, "Ejemplo", 30);
-//     await eliminarDatos(db, 1);
-//   })
-//   .catch((error) => {
-//     console.error("Error al abrir la base de datos:", error);
-//   });
+  // Tipo de dato
+  switch (columna.tipoDato) {
+    // Texto
+    case "string":
+      sql = "TEXT";
+      break;
+    // Numero
+    case "number":
+      sql =
+        columna.nombre === "id"
+          ? "INTEGER PRIMARY KEY AUTOINCREMENT" // Si el nombre de la columna es "id", se asigna como clave primaria.
+          : "REAL"; // En otros casos, se asigna como REAL en SQL.
+      break;
+    // Booleano
+    case "boolean":
+      sql = "INTEGER";
+      break;
+    // Fecha
+    case "Date":
+      sql = "NUMERIC";
+      break;
+    // ! EError
+    default:
+      throw new Error(`Tipo de dato no válido: ${columna.tipoDato}`);
+  }
+
+  // ? Se puede nulo
+  if (columna.isNull) {
+    sql += " NULL";
+  } else {
+    sql += " NOT NULL";
+  }
+
+  // ? Unico
+  if (columna.isUnico) sql += " UNIQUE";
+
+  // ? Existe magnitud
+  if (columna.maxLongitud !== undefined)
+    sql += ` CHECK(LENGTH(${columna.nombre}) <= ${columna.maxLongitud})`;
+
+  // ? Existe valor por defecto
+  if (columna.valorPorDefecto !== undefined)
+    sql += ` DEFAULT '${columna.valorPorDefecto}'`;
+
+  // ?  Existe validacion
+  // Agregamos una  restricción de validación con expresión regular a la definición SQL.
+  if (columna.validacionRegex)
+    sql += ` CHECK(${columna.nombre} REGEXP '${columna.validacionRegex}')`;
+
+  return sql;
+}
