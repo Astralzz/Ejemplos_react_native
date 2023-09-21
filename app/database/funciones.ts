@@ -16,9 +16,12 @@ export async function abrirBaseDeDatos(
   nombreBD: string
 ): Promise<SQLite.WebSQLDatabase> {
   try {
-    // ? El directorio existe, si no, se crea.
-    const info = await FileSystem.getInfoAsync(RUTAS.SQL);
+    // Obtenemos directorio
+    const info: FileSystem.FileInfo = await FileSystem.getInfoAsync(RUTAS.SQL);
+
+    // ? No existe
     if (!info.exists) {
+      // Creamos directorio
       await FileSystem.makeDirectoryAsync(RUTAS.SQL, {
         intermediates: true,
       });
@@ -27,19 +30,26 @@ export async function abrirBaseDeDatos(
     // Ruta completa al archivo de base de datos.
     const rutaBaseDeDatos = `${RUTAS.SQL}/${nombreBD}.db`;
 
-    // ? El archivo de base de datos existe, si no, se crea.
+    // Obtenemos el archivo de base de datos existe
     const infoBD = await FileSystem.getInfoAsync(rutaBaseDeDatos);
+
+    // ? No existe
     if (!infoBD.exists) {
       // Puedes inicializar la base de datos aquí si es necesario.
       // Por ejemplo, SQLite.openDatabase(rutaBaseDeDatos);
       // O simplemente puedes crear un archivo vacío.
-      await FileSystem.writeAsStringAsync(rutaBaseDeDatos, "", {
-        encoding: FileSystem.EncodingType.UTF8,
-      });
+      await FileSystem.writeAsStringAsync(
+        rutaBaseDeDatos,
+        `Este archivo contiene la base de datos con el nombre de ${nombreBD}, NO BORRAR`,
+        {
+          encoding: FileSystem.EncodingType.UTF8,
+        }
+      );
     }
 
     // Abre la base de datos SQLite y la devuelve.
-    return SQLite.openDatabase(rutaBaseDeDatos);
+    return SQLite.openDatabase(`${nombreBD}.bd`);
+    // return SQLite.openDatabase(rutaBaseDeDatos);
 
     // ! Error
   } catch (error: unknown) {
@@ -75,34 +85,24 @@ export async function crearTablaEnBD(
         );
       `;
 
-    // Mostramos
-    console.log(sentenciaSql);
+    // Exito transición
+    const ExitoTransicion: () => void = () =>
+      console.log("Exito en la transición");
 
-    // Ejecutamos la sentencia
-    database.transaction((tx: SQLite.SQLTransaction) =>
-      tx.executeSql(
-        // Sentencia
-        sentenciaSql,
-        // Columnas
-        [],
-        // * Exito | callback
-        // Tipo => SQLStatementCallback = (transaction: SQLTransaction, resultSet: SQLResultSet) => void;
-        (txObj: SQLite.SQLTransaction, resultSet: SQLite.SQLResultSet) => {
-          console.log(`Exito: ${resultSet.rowsAffected}`);
-        },
-        // ! Error | errorCallback
-        // tipo => (transaction: SQLTransaction, error: SQLError) => boolean;
-        (txObj: SQLite.SQLTransaction, error: SQLite.SQLError) => {
-          console.log("Error", error.message);
-          return false;
-        }
-      )
+    // Exito sentencia
+    const ExitoSentencia: () => void = () =>
+      console.log("Exito en la sentencia sql");
+
+    // Ejecutamos
+    await ejecutarTransicion(
+      database,
+      sentenciaSql,
+      ExitoTransicion,
+      ExitoSentencia
     );
 
-    console.log("FINALIZADO");
-
     // ! Error
-  } catch (error: unknown) {
+  } catch (error: unknown) { 
     throw new Error(String(error));
   }
 }
@@ -138,7 +138,9 @@ export async function insertarUsuario(
   }
 }
 
-// Obtener el SQL de la columna
+// -----------------  PRIVADAS -----------------
+
+// * Obtener el SQL de la columna
 function obtenerSQLColumna(columna: Columna): string {
   // Sql
   let sql = "";
@@ -193,4 +195,58 @@ function obtenerSQLColumna(columna: Columna): string {
     sql += ` CHECK(${columna.nombre} REGEXP '${columna.validacionRegex}')`;
 
   return sql;
+}
+
+// * Crear transición
+async function ejecutarTransicion(
+  db: SQLite.WebSQLDatabase,
+  sentenciaSql: string,
+  accionExitoTransicion?: () => void,
+  accionExitoEjecutarSql?: (
+    txObj?: SQLite.SQLTransaction,
+    resultSet?: SQLite.SQLResultSet
+  ) => void
+): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    db.transaction(
+      // Transición => SQLTransactionCallback
+      (tx: SQLite.SQLTransaction) =>
+        ejecutarSql(tx, sentenciaSql, accionExitoEjecutarSql),
+
+      // ! Error => SQLTransactionErrorCallback => (error: SQLError) => void;
+      (erTx: SQLite.SQLError) =>
+        reject(new Error(`TransiciónError => ${erTx.message}`)),
+
+      // * Exito
+      () => {
+        if (accionExitoTransicion) {
+          accionExitoTransicion();
+        }
+        resolve();
+      }
+    );
+  });
+}
+
+// * Ejecutar SQL
+async function ejecutarSql(
+  tr: SQLite.SQLTransaction,
+  sentenciaSql: string,
+  accionExito?: SQLite.SQLStatementCallback
+): Promise<void> {
+  tr.executeSql(
+    // Sentencia => string
+    sentenciaSql,
+    // Columnas => (number | string | null)[]
+    null,
+    // * Exito | callback
+    // Tipo => SQLStatementCallback = (transaction: SQLTransaction, resultSet: SQLResultSet) => void;
+    accionExito,
+    // ! Error en la ejecución sql | errorCallback
+    // tipo => errorCallback = (transaction: SQLTransaction, error: SQLError) => boolean;
+    (txObj: SQLite.SQLTransaction, erSql: SQLite.SQLError) => {
+      console.log("Error en la sentencia ", erSql.message);
+      return false;
+    }
+  );
 }
