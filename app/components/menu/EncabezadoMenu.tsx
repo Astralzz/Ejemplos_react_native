@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Image, Text, StyleProp, ViewStyle } from "react-native";
+import { View, Image, Text } from "react-native";
 import MenuStyles from "../../styles/menuStyles";
-import VariablesColors, { ColorsMenu } from "../../styles/colorsApp";
+import { ColorsMenu } from "../../styles/colorsApp";
 
 // * Variables
 const ImgEncabezado = require("../../assets/imgs/shall.jpg");
@@ -21,7 +21,9 @@ const EncabezadoMenu: React.FC<EncabezadoProps> = ({
   tema,
 }) => {
   return (
-    <View style={[estilo.global, {borderBottomColor:tema.color_separador_menu}]}>
+    <View
+      style={[estilo.global, { borderBottomColor: tema.color_separador_menu }]}
+    >
       <Image style={estilo.imagen} source={ImgEncabezado} />
       <Text style={[estilo.titulo, { color: tema.color_letra_menu }]}>
         {titulo}

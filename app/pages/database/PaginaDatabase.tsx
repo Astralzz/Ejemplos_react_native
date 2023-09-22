@@ -7,7 +7,7 @@ import {
   abrirBaseDeDatos,
   cerrarBaseDeDatos,
   crearTablaEnBD,
-  insertarUsuario,
+  verDatosDeTabla,
 } from "../../database/funciones";
 import TablaUsuarios from "../../models/usuarios/TablaUsuarios";
 
@@ -27,7 +27,6 @@ const PaginaDatabase: React.FC = () => {
     null
   );
   const [isConectadoBd, setConectadoBd] = useState<boolean>(false);
-  const [isCreandoTabla, setCreandoTabla] = useState<boolean>(false);
 
   // * conectar con la BD
   const conectarBD = async (): Promise<void> => {
@@ -83,8 +82,6 @@ const PaginaDatabase: React.FC = () => {
         throw new Error("La BD esta desconectada");
       }
 
-      setCreandoTabla(true);
-
       // Cerramos la tabla usuarios
       await crearTablaEnBD(baseDeDatos, TablaUsuarios);
 
@@ -101,12 +98,28 @@ const PaginaDatabase: React.FC = () => {
       //   `Los datos se crearon correctamente`
       // );
 
-      setCreandoTabla(false);
+      // ! Error
+    } catch (err: unknown) {
+      Alert.alert("Error al crear tabla 🔴", `${String(err)}, 🥹`);
+    }
+  };
+
+  // * Ver lista de usuarios
+  const verListaDeUsuarios = async (): Promise<void> => {
+    try {
+      // ? No esta activa
+      if (!baseDeDatos) {
+        throw new Error("La BD esta desconectada");
+      }
+
+      // Cerramos la tabla usuarios
+      const res = await verDatosDeTabla(baseDeDatos, TablaUsuarios.nombre);
+
+      console.log(res);
 
       // ! Error
     } catch (err: unknown) {
-      setCreandoTabla(false);
-      Alert.alert("Error al crear tabla 🔴", `Error: ${String(err)}, 🥹`);
+      Alert.alert("Error al ver la lista 🔴", `${String(err)}, 🥹`);
     }
   };
 
@@ -125,13 +138,13 @@ const PaginaDatabase: React.FC = () => {
             color: tema.colorsPagina.color_letra_paginas,
           }}
         >
-          Uso de bases de datos locales en la app
+          Uso de bases de datos locales
         </Text>
 
         {/* Botones superiores */}
         <View style={estilos.caja_botones}>
           {/* Boton de conectar */}
-          {!isConectadoBd && !isCreandoTabla && (
+          {!isConectadoBd && (
             <Pressable
               onPress={conectarBD}
               style={{
@@ -153,7 +166,7 @@ const PaginaDatabase: React.FC = () => {
           )}
 
           {/* Boton de desconectar */}
-          {isConectadoBd && !isCreandoTabla && (
+          {isConectadoBd && (
             <Pressable
               onPress={desconectarBD}
               style={{
@@ -161,6 +174,7 @@ const PaginaDatabase: React.FC = () => {
                 backgroundColor: !isConectadoBd
                   ? tema.otros.colorErrorOpaco
                   : tema.otros.colorError,
+                marginBottom: 26,
               }}
             >
               <Text
@@ -176,25 +190,66 @@ const PaginaDatabase: React.FC = () => {
         </View>
 
         {/* Boton de crear tabla usuarios */}
-        {isConectadoBd && !isCreandoTabla && (
-          <Pressable
-            onPress={crearTablaUsuarios}
-            style={{
-              ...estilos.boton,
-              backgroundColor: !isConectadoBd
-                ? tema.otros.colorExitoOpaco
-                : tema.otros.colorExito,
-            }}
-          >
-            <Text
+        {isConectadoBd && (
+          <>
+            {/* Boton de crear tabla usuarios */}
+            <Pressable
+              onPress={crearTablaUsuarios}
               style={{
-                ...estilos.texto_boton,
-                color: tema.colorsPagina.color_letra_paginas,
+                ...estilos.boton,
+                backgroundColor: !isConectadoBd
+                  ? tema.otros.colorExitoOpaco
+                  : tema.otros.colorExito,
               }}
             >
-              Crear tabla usuarios
-            </Text>
-          </Pressable>
+              <Text
+                style={{
+                  ...estilos.texto_boton,
+                  color: tema.colorsPagina.color_letra_paginas,
+                }}
+              >
+                Crear tabla usuarios
+              </Text>
+            </Pressable>
+            {/* Boton de ver datos de usuarios */}
+            <Pressable
+              onPress={verListaDeUsuarios}
+              style={{
+                ...estilos.boton,
+                backgroundColor: !isConectadoBd
+                  ? tema.otros.colorExitoOpaco
+                  : tema.otros.colorExito,
+              }}
+            >
+              <Text
+                style={{
+                  ...estilos.texto_boton,
+                  color: tema.colorsPagina.color_letra_paginas,
+                }}
+              >
+                Ver lista de usuarios
+              </Text>
+            </Pressable>
+            {/* Boton de insertar usuario */}
+            <Pressable
+              onPress={verListaDeUsuarios}
+              style={{
+                ...estilos.boton,
+                backgroundColor: !isConectadoBd
+                  ? tema.otros.colorExitoOpaco
+                  : tema.otros.colorExito,
+              }}
+            >
+              <Text
+                style={{
+                  ...estilos.texto_boton,
+                  color: tema.colorsPagina.color_letra_paginas,
+                }}
+              >
+                Ver lista de usuarios
+              </Text>
+            </Pressable>
+          </>
         )}
       </View>
     </View>
