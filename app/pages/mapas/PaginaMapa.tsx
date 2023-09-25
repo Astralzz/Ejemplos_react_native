@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { View, Text } from "react-native";
 import { usarTema } from "../../components/theme/TemaApp";
-import BotonTema from "../../components/botones/BotonTema";
-import { coloresClaros } from "../../styles/colorsApp";
 import ComponentMaps from "../../components/maps/ComponentMaps";
 import * as Location from "expo-location";
 import BotonIcono from "../../components/botones/BotonIcono";

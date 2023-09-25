@@ -13,21 +13,21 @@ const TablaUsuarios: Tabla = {
       nombre: "nombre",
       tipoDato: "string",
       maxLongitud: 60,
-      validacionRegex: /^[A-Za-z]+$/,
+      validacionRegex: '^[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]{2,60}$'
     },
     {
       nombre: "matricula",
       tipoDato: "string",
       maxLongitud: 8,
       isUnico: true,
-      validacionRegex: /^[0-9]{8}$/,
+      validacionRegex: "^[0-9]{8}$",
     },
     {
       nombre: "telefono",
       tipoDato: "string",
       maxLongitud: 10,
       isNull: true,
-      validacionRegex: /^[0-9]{10}$/,
+      validacionRegex: "^[0-9]{10}$",
     },
   ],
 };

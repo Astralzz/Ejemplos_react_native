@@ -29,3 +29,6 @@ export const regexDatosQr: RegExp = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\d\s_\-]{2,
 
 // * Para Matricula
 export const regexMatricula: RegExp = /^[0-9]{8}$/;
+
+// * Para Telefono
+export const regexTelefono: RegExp = /^[0-9]{10}$/;

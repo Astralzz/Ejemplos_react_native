@@ -132,51 +132,133 @@ export async function verDatosDeTabla(
   database: SQLite.WebSQLDatabase,
   tabla: string
 ): Promise<any[]> {
-  return new Promise<any[]>((resolve, reject) => {
-    const sentenciaSql = `SELECT * FROM ${tabla}`;
-    ejecutarTransicion({
-      db: database,
-      sentenciaSql: sentenciaSql,
-      sqlSentencia: {
-        accionExito(tx, res) {
-          const datos = [];
-          for (let i = 0; i < res.rows.length; i++) {
-            datos.push(res.rows.item(i));
-          }
-          resolve(datos);
+  return new Promise<any[]>(async (resolve, reject) => {
+    try {
+      // Verificamos
+      const tablaExiste = await verificarTablaExistente(database, tabla);
+
+      // ? No Existe
+      if (!tablaExiste) {
+        throw new Error(`La tabla '${tabla}' no existe.`);
+      }
+
+      // Sentencia
+      const sentenciaSql = `SELECT * FROM ${tabla}`;
+
+      // Ejecutamos
+      ejecutarTransicion({
+        db: database,
+        sentenciaSql: sentenciaSql,
+        sqlSentencia: {
+          accionExito(tx, res) {
+            const datos = [];
+            for (let i = 0; i < res.rows.length; i++) {
+              datos.push(res.rows.item(i));
+            }
+            resolve(datos);
+          },
+          accionError(txObj, erSql) {
+            reject(new Error(`Error al consultar datos => ${erSql.message}`));
+          },
         },
-        accionError(txObj, erSql) {
-          reject(new Error(`Error al consultar datos => ${erSql.message}`));
-        },
-      },
-    });
+      });
+
+      // ! Error
+    } catch (error: unknown) {
+      reject(new Error(String(error)));
+    }
   });
 }
 
-// Insertar un nuevo dato en la tabla
+// * Insertar un nuevo dato en la tabla
 export async function insertarDatoEnTabla(
   database: SQLite.WebSQLDatabase,
   tabla: string,
   datos: Record<string, any>
 ): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    const columnas = Object.keys(datos).join(", ");
-    const valores = Object.values(datos)
-      .map((value) => `'${value}'`)
-      .join(", ");
-    const sentenciaSql = `INSERT INTO ${tabla} (${columnas}) VALUES (${valores})`;
-    ejecutarTransicion({
-      db: database,
-      sentenciaSql: sentenciaSql,
-      sqlSentencia: {
-        accionExito() {
-          resolve();
+  return new Promise<void>(async (resolve, reject) => {
+    try {
+      // Verificamos
+      const tablaExiste = await verificarTablaExistente(database, tabla);
+
+      // ? No Existe
+      if (!tablaExiste) {
+        throw new Error(`La tabla '${tabla}' no existe.`);
+      }
+
+      // Filtramos los campos que no son nulos o vacíos
+      const columnasNoNulas = Object.keys(datos).filter(
+        (key) => datos[key] !== null && datos[key] !== ""
+      );
+
+      // Obtenemos las key / columnas del objeto filtrado
+      const columnas = columnasNoNulas.join(", ");
+
+      // Obtenemos los valores del objeto filtrado
+      const valores = columnasNoNulas
+        .map((key) => `'${datos[key]}'`)
+        .join(", ");
+
+      // Caemos sentencia
+      const sentenciaSql = `INSERT INTO ${tabla} (${columnas}) VALUES (${valores})`;
+
+      // Ejecutamos
+      ejecutarTransicion({
+        db: database,
+        sentenciaSql: sentenciaSql,
+        sqlSentencia: {
+          accionExito() {
+            resolve();
+          },
+          accionError(txObj, erSql) {
+            reject(new Error(`Error al insertar dato => ${erSql.message}`));
+          },
         },
-        accionError(txObj, erSql) {
-          reject(new Error(`Error al insertar dato => ${erSql.message}`));
+      });
+
+      // ! Error
+    } catch (error: unknown) {
+      reject(new Error(String(error)));
+    }
+  });
+}
+
+// * Eliminar tabla
+export async function eliminarTabla(
+  database: SQLite.WebSQLDatabase,
+  tabla: string
+): Promise<void> {
+  return new Promise<void>(async (resolve, reject) => {
+    try {
+      // Verificamos
+      const tablaExiste = await verificarTablaExistente(database, tabla);
+
+      // ? No Existe
+      if (!tablaExiste) {
+        throw new Error(`La tabla '${tabla}' no existe.`);
+      }
+
+      // Sentencia
+      const sentenciaSql = `DROP TABLE IF EXISTS ${tabla};`;
+
+      // Ejecutamos
+      ejecutarTransicion({
+        db: database,
+        sentenciaSql: sentenciaSql,
+        sqlSentencia: {
+          accionExito() {
+            resolve();
+          },
+          accionError(txObj, erSql) {
+            reject(new Error(`Error al eliminar tabla => ${erSql.message}`));
+          },
         },
-      },
-    });
+      });
+
+      // ! Error
+    } catch (error: unknown) {
+      reject(new Error(String(error)));
+    }
   });
 }
 
@@ -208,22 +290,6 @@ async function verificarTablaExistente(
     });
   });
 }
-
-// db,
-// sentenciaSql,
-// [nombreTabla],
-// undefined,
-// (txObj, resultSet) => {
-//   resolve(resultSet.rows.length > 0);
-// },
-// (txObj, erSql) => {
-//   reject(
-//     new Error(
-//       `Error al verificar la existencia de la tabla => ${erSql.message}`
-//     )
-//   );
-//   return false; // No detener la transacción
-// }
 
 // * Obtener el SQL de la columna
 function obtenerSQLColumna(columna: Columna): string {

@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Pressable, Text } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import { StyleSheet, Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ColorPagina, OtrosColores } from "../../styles/colorsApp";
 import ElementInput from "../../components/inputs/ElememtInput";
 import {
   regexCodeadas,
   regexDescripcionCorta,
-  regexNumerosDecimales,
   regexTitulo,
 } from "../../variables/exprecionesRegulares";
 import Marcador from "../../models/Marcador";

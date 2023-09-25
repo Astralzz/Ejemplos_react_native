@@ -5,7 +5,6 @@ import {
   Alert,
   Image,
   StyleSheet,
-  Text,
 } from "react-native";
 import GlobalStyles from "../../styles/global";
 import { usarTema } from "../../components/theme/TemaApp";

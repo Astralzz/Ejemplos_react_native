@@ -6,7 +6,7 @@ interface Columna {
   isUnico?: boolean;
   maxLongitud?: number;
   valorPorDefecto?: string | number | boolean;
-  validacionRegex?: RegExp;
+  validacionRegex?: RegExp | string;
   descripcion?: string;
 }
 
